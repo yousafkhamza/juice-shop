@@ -3,7 +3,7 @@ name: Deploy Dockerized Node.js App to EC2
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
