@@ -27,8 +27,13 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        docker build -t juice-shop:latest .
+        docker build -t yousafkhamza/juice-shop-kpmg:latest .
 
+    - name: Push Docker Image to Docker Hub
+      run: |
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker push yousafkhamza/juice-shop-kpmg:latest
+        
     - name: SSH into EC2 and Deploy
       uses: appleboy/ssh-action@master
       with:
@@ -36,12 +41,15 @@ jobs:
         username: ec2-user  # Change this to your EC2 instance username
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          set -e
+          ssh -v -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ec2-user@${{ secrets.SSH_HOST }} <<EOF
           # Pull the latest Docker image from your Docker registry (e.g., Docker Hub)
-          docker pull juice-shop:latest
+          docker pull yousafkhamza/juice-shop-kpmg:latest
 
           # Stop and remove the existing container (if running)
           docker stop your-container-name || true
           docker rm your-container-name || true
 
           # Run a new Docker container with the updated image
-          docker run -d --name your-container-name -p 80:80 juice-shop:latest
+          docker run -d --name your-container-name -p 80:80 yousafkhamza/juice-shop-kpmg:latest          
+          EOF
