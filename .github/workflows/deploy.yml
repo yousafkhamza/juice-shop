@@ -49,4 +49,25 @@ jobs:
           sudo docker rm juice_shop_kpmg || true
 
           # Run a new Docker container with the updated image
-          sudo docker run -d --name juice_shop_kpmg -p 80:3000 yousafkhamza/juice-shop-kpmg:latest  
+          sudo docker run -d --name juice_shop_kpmg -p 80:3000 yousafkhamza/juice-shop-kpmg:latest 
+
+  qa_with_sq:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install
+     
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
