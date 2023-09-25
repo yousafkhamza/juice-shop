@@ -47,9 +47,9 @@ jobs:
           docker pull yousafkhamza/juice-shop-kpmg:latest
 
           # Stop and remove the existing container (if running)
-          docker stop your-container-name || true
-          docker rm your-container-name || true
+          docker stop eloquent_rosalind || true
+          docker rm eloquent_rosalind || true
 
           # Run a new Docker container with the updated image
-          docker run -d --name your-container-name -p 80:80 yousafkhamza/juice-shop-kpmg:latest          
+          docker run -d --name eloquent_rosalin -p 80:80 yousafkhamza/juice-shop-kpmg:latest          
           EOF
