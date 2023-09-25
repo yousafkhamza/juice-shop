@@ -49,4 +49,4 @@ jobs:
           sudo docker rm eloquent_rosalind || true
 
           # Run a new Docker container with the updated image
-          sudo docker run -d --name eloquent_rosalin -p 80:80 yousafkhamza/juice-shop-kpmg:latest  
+          sudo docker run -d --name eloquent_rosalin -p 80:3000 yousafkhamza/juice-shop-kpmg:latest  
