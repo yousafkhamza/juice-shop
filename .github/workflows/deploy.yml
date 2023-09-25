@@ -47,6 +47,7 @@ jobs:
           # Stop and remove the existing container (if running)
           sudo docker stop eloquent_rosalind || true
           sudo docker rm eloquent_rosalind || true
+          sudo docker image rm yousafkhamza/juice-shop-kpmg || true
 
           # Run a new Docker container with the updated image
           sudo docker run -d --name eloquent_rosalin -p 80:80 yousafkhamza/juice-shop-kpmg:latest  
