@@ -35,14 +35,12 @@ jobs:
         docker push yousafkhamza/juice-shop-kpmg:latest
         
     - name: SSH into EC2 and Deploy
-      uses: D3rHase/ssh-command-action@v0.2.1
+      uses: appleboy/ssh-action@master
       with:
-        HOST: ${{ secrets.SSH_HOST }}
-        USER: ec2-user
-        PRIVATE_SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        COMMAND: |
-          set -e
-          ssh -v -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ec2-user@${{ secrets.SSH_HOST }} <<EOF
+        host: ${{ secrets.SSH_HOST }}
+        username: ec2-user
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
           # Pull the latest Docker image from your Docker registry (e.g., Docker Hub)
           sudo docker pull yousafkhamza/juice-shop-kpmg:latest
 
@@ -51,5 +49,4 @@ jobs:
           sudo docker rm eloquent_rosalind || true
 
           # Run a new Docker container with the updated image
-          sudo docker run -d --name eloquent_rosalin -p 80:80 yousafkhamza/juice-shop-kpmg:latest          
-          EOF
+          sudo docker run -d --name eloquent_rosalin -p 80:80 yousafkhamza/juice-shop-kpmg:latest  
