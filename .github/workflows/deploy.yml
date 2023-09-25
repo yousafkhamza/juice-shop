@@ -1,0 +1,42 @@
+name: Deploy Dockerized Node.js App to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Docker
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install docker.io
+        sudo systemctl start docker
+        sudo systemctl enable docker
+
+    - name: Build Docker Image
+      run: |
+        docker build -t juice-shop:latest .
+
+    - name: SSH into EC2 and Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ec2-user  # Change this to your EC2 instance username
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          # Pull the latest Docker image from your Docker registry (e.g., Docker Hub)
+          docker pull juice-shop:latest
+
+          # Stop and remove the existing container (if running)
+          docker stop your-container-name || true
+          docker rm your-container-name || true
+
+          # Run a new Docker container with the updated image
+          docker run -d --name your-container-name -p 80:80 juice-shop:latest
