@@ -44,12 +44,12 @@ jobs:
           set -e
           ssh -v -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ec2-user@${{ secrets.SSH_HOST }} <<EOF
           # Pull the latest Docker image from your Docker registry (e.g., Docker Hub)
-          docker pull yousafkhamza/juice-shop-kpmg:latest
+          sudo docker pull yousafkhamza/juice-shop-kpmg:latest
 
           # Stop and remove the existing container (if running)
-          docker stop eloquent_rosalind || true
-          docker rm eloquent_rosalind || true
+          sudo docker stop eloquent_rosalind || true
+          sudo docker rm eloquent_rosalind || true
 
           # Run a new Docker container with the updated image
-          docker run -d --name eloquent_rosalin -p 80:80 yousafkhamza/juice-shop-kpmg:latest          
+          sudo docker run -d --name eloquent_rosalin -p 80:80 yousafkhamza/juice-shop-kpmg:latest          
           EOF
